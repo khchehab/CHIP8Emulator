@@ -13,6 +13,7 @@ import java.io.File;
 public class Frame {
     private static final int PADDING = 5;
     private static final JPanel TOP_PADDING, BOTTOM_PADDING, LEFT_PADDING, RIGHT_PADDING;
+    private static final JFileChooser ROM_FILE_CHOOSER;
 
     static {
         Dimension verticalDimension = new Dimension(0, PADDING),
@@ -33,6 +34,11 @@ public class Frame {
         RIGHT_PADDING = new JPanel();
         RIGHT_PADDING.setPreferredSize(horizontalDimension);
         RIGHT_PADDING.setBackground(Color.BLACK);
+
+        ROM_FILE_CHOOSER = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        ROM_FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        ROM_FILE_CHOOSER.setMultiSelectionEnabled(false);
+        ROM_FILE_CHOOSER.addChoosableFileFilter(new FileNameExtensionFilter("Chip8 Roms (*.ch8 or *.c8)", "ch8", "c8"));
     }
 
     private static Frame instance = null;
@@ -43,10 +49,12 @@ public class Frame {
     private Screen screen;
     private KeypadListener keypadListener;
     private int scale;
+    private File currentRomFile;
 
     private Frame() {
         mode = Chip8Mode.STANDARD;
         emulator = null;
+        currentRomFile = null;
         scale = 10;
         keypadListener = new KeypadListener();
         buildFrame();
@@ -100,25 +108,17 @@ public class Frame {
     }
 
     private void buildMenu() {
+        // Building the file menu
         JMenuItem loadRomMenuItem = new JMenuItem("Load");
-        loadRomMenuItem.addActionListener(event -> {
-            // todo maybe move this file chooser to a static global variable to avoid initializing each time this action is clicked
-            JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            fileChooser.setMultiSelectionEnabled(false);
-            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Chip8 Roms (*.ch8 or *.c8)", "ch8", "c8"));
-            int ret = fileChooser.showOpenDialog(null);
-
-            if(ret == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = fileChooser.getSelectedFile();
-                System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-                startEmulator(selectedFile); // todo this is not working, see what should be done
-            }
-        });
+        loadRomMenuItem.addActionListener(event -> showRomFileChooser());
 
         JMenuItem resetMenuItem = new JMenuItem("Reset");
-        resetMenuItem.addActionListener(event -> {
-            // todo action listener for resetting emulator
+        resetMenuItem.addActionListener(event -> startEmulator());
+
+        JMenuItem stopMenuItem = new JMenuItem("Stop");
+        stopMenuItem.addActionListener(event -> {
+            stopEmulator();
+            currentRomFile = null;
         });
 
         JMenuItem exitMenuItem = new JMenuItem("Exit");
@@ -127,19 +127,61 @@ public class Frame {
         JMenu fileMenu = new JMenu("File");
         fileMenu.add(loadRomMenuItem);
         fileMenu.add(resetMenuItem);
+        fileMenu.add(stopMenuItem);
         fileMenu.addSeparator();
         fileMenu.add(exitMenuItem);
 
+        // Building the options menu
+        JMenuItem settingsMenuItem = new JMenuItem("Settings");
+        settingsMenuItem.addActionListener(event -> {
+            // todo action listener for settings
+            // options to have:
+            // 1. color of set and unset pixels
+            // 2. change cpu frequency
+            // 3. change the scale
+            // 4. keypad mapping
+        });
+
+        JMenu optionsMenu = new JMenu("Options");
+        optionsMenu.add(settingsMenuItem);
+
+        // Building the menu bar
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(fileMenu);
+        menuBar.add(optionsMenu);
 
         frame.setJMenuBar(menuBar);
     }
 
-    private void startEmulator(File romFile) {
-        emulator = new Emulator(mode, screen, keypadListener);
-        emulator.loadRom(romFile);
-        emulator.start();
+    private void startEmulator() {
+        if(currentRomFile == null) {
+            return;
+        }
+
+        stopEmulator();
+
+        new Thread(() -> {
+            emulator = new Emulator(mode, screen, keypadListener);
+            emulator.loadRom(currentRomFile);
+            emulator.start();
+        }).start();
+    }
+
+    private void stopEmulator() {
+        if(emulator != null) {
+            emulator.stop();
+            emulator = null;
+        }
+    }
+
+    private void showRomFileChooser() {
+        int ret = ROM_FILE_CHOOSER.showOpenDialog(null);
+
+        if(ret == JFileChooser.APPROVE_OPTION) {
+            currentRomFile = ROM_FILE_CHOOSER.getSelectedFile();
+            System.out.println("Selected file: " + currentRomFile.getAbsolutePath());
+            startEmulator();
+        }
     }
 
     private int getFrameWidth() {

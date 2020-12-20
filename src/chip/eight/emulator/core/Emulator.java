@@ -13,6 +13,7 @@ public class Emulator {
     private KeypadListener keypadListener;
     private long cpuInterval;
     private int refreshCycle;
+    private boolean isRunning;
 
     public Emulator(Chip8Mode mode, Screen screen, KeypadListener keypadListener) {
         this.memory = new Memory(Constants.MEMORY_SIZE);
@@ -22,6 +23,7 @@ public class Emulator {
         this.cpu = new CPU(memory, stack, screen, keypadListener, mode);
         this.cpuInterval = 1_000_000_000 / mode.getCpuFrequency(); // in nanoseconds, each cycle corresponds to a full interval
         this.refreshCycle = mode.getCpuFrequency() / 60;
+        this.isRunning = false;
     }
 
     public void loadRom(File romFile) {
@@ -36,14 +38,19 @@ public class Emulator {
     }
 
     public void start() {
+        isRunning = true;
         run();
+    }
+
+    public void stop() {
+        isRunning = false;
     }
 
     private void run() {
         long startTime, endTime;
         int cycleCounter = 0;
 
-        while(true) {
+        while(isRunning) {
             startTime = System.nanoTime();
 
             cpu.execute();
@@ -64,6 +71,10 @@ public class Emulator {
 
             finishCycle(startTime, endTime);
         }
+
+        // if the emulator stops running, clear the screen and repaint
+        screen.clearScreen();
+        screen.repaint();
     }
 
     private void finishCycle(long startTime, long endTime) {
