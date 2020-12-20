@@ -106,7 +106,7 @@ public class Frame {
             JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fileChooser.setMultiSelectionEnabled(false);
-            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Chip8 Roms", "ch8"));
+            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Chip8 Roms (*.ch8 or *.c8)", "ch8", "c8"));
             int ret = fileChooser.showOpenDialog(null);
 
             if(ret == JFileChooser.APPROVE_OPTION) {

@@ -1,8 +1,7 @@
 package chip.eight.emulator.core;
 
 public enum Chip8Mode {
-    STANDARD(64, 32, 500),
-    SUPER(128, 64, 1_000);
+    STANDARD(64, 32, 500);
 
     private int width;
     private int height;
