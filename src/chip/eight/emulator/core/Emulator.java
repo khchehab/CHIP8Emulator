@@ -12,7 +12,6 @@ public class Emulator {
     private Memory memory;
     private Stack stack;
     private Screen screen;
-    private KeypadListener keypadListener;
     private long cpuInterval;
     private int refreshCycle;
     private boolean isRunning;
@@ -22,7 +21,6 @@ public class Emulator {
         this.memory = new Memory(Constants.MEMORY_SIZE);
         this.stack = new Stack(Constants.STACK_SIZE);
         this.screen = screen;
-        this.keypadListener = keypadListener;
         this.cpu = new CPU(memory, stack, screen, keypadListener, mode);
         this.cpuInterval = 1_000_000_000 / cpuFrequency; // in nanoseconds, each cycle corresponds to a full interval
         this.refreshCycle = cpuFrequency / 60;
