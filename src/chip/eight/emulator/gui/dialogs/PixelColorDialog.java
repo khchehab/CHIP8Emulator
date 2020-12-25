@@ -14,9 +14,6 @@ public class PixelColorDialog {
     private static final int UNSET_PIXEL_PANEL_HEIGHT = 50;
     private static final int BUTTON_PANEL_HEIGHT = 30;
 
-    private static final int OK_CLICKED = 1;
-    private static final int CANCEL_CLICKED = 0;
-
     private JDialog dialog;
     private JPanel contentPane;
     private JPanel mainPanel;
@@ -50,7 +47,7 @@ public class PixelColorDialog {
     }
 
     public boolean isOkClicked() {
-        return state == OK_CLICKED;
+        return state == Constants.OK_CLICKED;
     }
 
     private void buildDialog() {
@@ -155,7 +152,7 @@ public class PixelColorDialog {
     }
 
     private void onCancel() {
-        this.state = CANCEL_CLICKED;
+        this.state = Constants.CANCEL_CLICKED;
         dialog.dispose();
     }
 
@@ -165,7 +162,7 @@ public class PixelColorDialog {
             return;
         }
 
-        this.state = OK_CLICKED;
+        this.state = Constants.OK_CLICKED;
         setColor = constructColor(setPixelRedField, setPixelGreenField, setPixelBlueField);
         unsetColor = constructColor(unsetPixelRedField, unsetPixelGreenField, unsetPixelBlueField);
         dialog.dispose();

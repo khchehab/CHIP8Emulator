@@ -9,6 +9,9 @@ public class Constants {
 
     public static final int NO_KEY = -1;
 
+    public static final int OK_CLICKED = 1;
+    public static final int CANCEL_CLICKED = 0;
+
     // Prevent initialization
     private Constants() {}
 
