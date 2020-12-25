@@ -3,6 +3,7 @@ package chip.eight.emulator.gui;
 import chip.eight.emulator.core.Chip8Mode;
 import chip.eight.emulator.core.Emulator;
 import chip.eight.emulator.core.KeypadListener;
+import chip.eight.emulator.gui.dialogs.PixelColorChangerDialog;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -50,6 +51,7 @@ public class Frame {
     private KeypadListener keypadListener;
     private int scale;
     private File currentRomFile;
+    private int cpuFrequency;
 
     private Frame() {
         mode = Chip8Mode.STANDARD;
@@ -57,6 +59,7 @@ public class Frame {
         currentRomFile = null;
         scale = 10;
         keypadListener = new KeypadListener();
+        this.cpuFrequency = mode.getCpuFrequency();
         buildFrame();
     }
 
@@ -142,9 +145,15 @@ public class Frame {
             }
         });
 
+        JMenuItem chip8ModeMenuItem = new JMenuItem("Chip8 Mode");
+        chip8ModeMenuItem.addActionListener(event -> {
+            // todo
+        });
+
         JMenuItem cpuFrequencyMenuItem = new JMenuItem("CPU Frequency");
         cpuFrequencyMenuItem.addActionListener(event -> {
-            // todo
+            cpuFrequency = 1_500;
+            startEmulator();
         });
 
         JMenuItem scaleMenuItem = new JMenuItem("Scale");
@@ -159,6 +168,7 @@ public class Frame {
 
         JMenu settingsMenu = new JMenu("Settings");
         settingsMenu.add(pixelColorsMenuItem);
+        settingsMenu.add(chip8ModeMenuItem);
         settingsMenu.add(cpuFrequencyMenuItem);
         settingsMenu.add(scaleMenuItem);
         settingsMenu.add(keypadMappingMenuItem);
@@ -179,7 +189,7 @@ public class Frame {
         stopEmulator();
 
         new Thread(() -> {
-            emulator = new Emulator(mode, screen, keypadListener);
+            emulator = new Emulator(mode, screen, keypadListener, cpuFrequency);
             emulator.loadRom(currentRomFile);
             emulator.start();
         }).start();

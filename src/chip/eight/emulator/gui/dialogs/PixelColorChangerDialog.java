@@ -1,4 +1,4 @@
-package chip.eight.emulator.gui;
+package chip.eight.emulator.gui.dialogs;
 
 import chip.eight.emulator.gui.filters.IntegerFilter;
 import chip.eight.emulator.util.Constants;

@@ -15,14 +15,14 @@ public class Emulator {
     private int refreshCycle;
     private boolean isRunning;
 
-    public Emulator(Chip8Mode mode, Screen screen, KeypadListener keypadListener) {
+    public Emulator(Chip8Mode mode, Screen screen, KeypadListener keypadListener, int cpuFrequency) {
         this.memory = new Memory(Constants.MEMORY_SIZE);
         this.stack = new Stack(Constants.STACK_SIZE);
         this.screen = screen;
         this.keypadListener = keypadListener;
         this.cpu = new CPU(memory, stack, screen, keypadListener, mode);
-        this.cpuInterval = 1_000_000_000 / mode.getCpuFrequency(); // in nanoseconds, each cycle corresponds to a full interval
-        this.refreshCycle = mode.getCpuFrequency() / 60;
+        this.cpuInterval = 1_000_000_000 / cpuFrequency; // in nanoseconds, each cycle corresponds to a full interval
+        this.refreshCycle = cpuFrequency / 60;
         this.isRunning = false;
     }
 
