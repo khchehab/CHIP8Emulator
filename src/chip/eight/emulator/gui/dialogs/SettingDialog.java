@@ -100,6 +100,4 @@ public abstract class SettingDialog {
         applyOkChanges();
         dialog.dispose();
     }
-
-
 }

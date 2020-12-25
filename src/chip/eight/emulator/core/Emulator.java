@@ -6,7 +6,7 @@ import chip.eight.emulator.util.Constants;
 import java.io.*;
 
 public class Emulator {
-    private enum EmulatorState { RUNNING, PAUSED, STOPPED; }
+    private enum EmulatorState { RUNNING, PAUSED, STOPPED }
 
     private CPU cpu;
     private Memory memory;
@@ -21,9 +21,8 @@ public class Emulator {
         this.memory = new Memory(Constants.MEMORY_SIZE);
         this.stack = new Stack(Constants.STACK_SIZE);
         this.screen = screen;
+        changeCpuFrequency(cpuFrequency);
         this.cpu = new CPU(memory, stack, screen, keypadListener, mode);
-        this.cpuInterval = 1_000_000_000 / cpuFrequency; // in nanoseconds, each cycle corresponds to a full interval
-        this.refreshCycle = cpuFrequency / 60;
         this.isRunning = false;
         this.state = EmulatorState.STOPPED;
     }
@@ -47,6 +46,11 @@ public class Emulator {
         state = EmulatorState.RUNNING;
     }
 
+    public void changeCpuFrequency(int cpuFrequency) {
+        this.cpuInterval = 1_000_000_000 / cpuFrequency; // in nanoseconds, each cycle corresponds to a full interval
+        this.refreshCycle = cpuFrequency / 60;
+    }
+
     public void start() {
         isRunning = true;
         state = EmulatorState.RUNNING;
@@ -62,12 +66,8 @@ public class Emulator {
         long startTime, endTime;
         int cycleCounter = 0;
 
-        int counter = 0;
-
         while(isRunning) {
             while(state == EmulatorState.PAUSED) {
-                System.out.println("paused: " + counter++);
-
                 try {
                     Thread.sleep(0);
                 } catch (InterruptedException e) {

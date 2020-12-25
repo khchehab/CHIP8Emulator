@@ -3,6 +3,7 @@ package chip.eight.emulator.gui;
 import chip.eight.emulator.core.Chip8Mode;
 import chip.eight.emulator.core.Emulator;
 import chip.eight.emulator.core.KeypadListener;
+import chip.eight.emulator.gui.dialogs.CpuFrequencyDialog;
 import chip.eight.emulator.gui.dialogs.PixelColorDialog;
 
 import javax.swing.*;
@@ -137,6 +138,7 @@ public class Frame {
         // Building the options menu
         JMenuItem pixelColorsMenuItem = new JMenuItem("Pixel Colors");
         pixelColorsMenuItem.addActionListener(event -> {
+            // todo see how to generify the code inside it since its the same with the other settings dialog
             pauseEmulator();
 
             PixelColorDialog dialog = new PixelColorDialog(frame, screen.getSetColor(), screen.getUnsetColor());
@@ -156,8 +158,16 @@ public class Frame {
 
         JMenuItem cpuFrequencyMenuItem = new JMenuItem("CPU Frequency");
         cpuFrequencyMenuItem.addActionListener(event -> {
-            cpuFrequency = 1_500;
-            startEmulator();
+            pauseEmulator();
+
+            CpuFrequencyDialog dialog = new CpuFrequencyDialog(frame, cpuFrequency);
+            dialog.show();
+
+            if(dialog.isOkClicked()) {
+                changeCpuFrequency(dialog.getCpuFrequency());
+            }
+
+            unpauseEmulator();
         });
 
         JMenuItem scaleMenuItem = new JMenuItem("Scale");
@@ -252,5 +262,13 @@ public class Frame {
         RIGHT_PADDING.setBackground(unsetColor);
         LEFT_PADDING.setBackground(unsetColor);
         screen.repaint();
+    }
+
+    private void changeCpuFrequency(int cpuFrequency) {
+        this.cpuFrequency = cpuFrequency;
+
+        if(emulator != null) {
+            emulator.changeCpuFrequency(cpuFrequency);
+        }
     }
 }
