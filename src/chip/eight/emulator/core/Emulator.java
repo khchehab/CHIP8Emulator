@@ -6,6 +6,8 @@ import chip.eight.emulator.util.Constants;
 import java.io.*;
 
 public class Emulator {
+    private enum EmulatorState { RUNNING, PAUSED, STOPPED; }
+
     private CPU cpu;
     private Memory memory;
     private Stack stack;
@@ -14,6 +16,7 @@ public class Emulator {
     private long cpuInterval;
     private int refreshCycle;
     private boolean isRunning;
+    private EmulatorState state;
 
     public Emulator(Chip8Mode mode, Screen screen, KeypadListener keypadListener, int cpuFrequency) {
         this.memory = new Memory(Constants.MEMORY_SIZE);
@@ -24,6 +27,7 @@ public class Emulator {
         this.cpuInterval = 1_000_000_000 / cpuFrequency; // in nanoseconds, each cycle corresponds to a full interval
         this.refreshCycle = cpuFrequency / 60;
         this.isRunning = false;
+        this.state = EmulatorState.STOPPED;
     }
 
     public void loadRom(File romFile) {
@@ -37,20 +41,42 @@ public class Emulator {
         }
     }
 
+    public void pause() {
+        state = EmulatorState.PAUSED;
+    }
+
+    public void unpause() {
+        state = EmulatorState.RUNNING;
+    }
+
     public void start() {
         isRunning = true;
+        state = EmulatorState.RUNNING;
         run();
     }
 
     public void stop() {
         isRunning = false;
+        state = EmulatorState.STOPPED;
     }
 
     private void run() {
         long startTime, endTime;
         int cycleCounter = 0;
 
+        int counter = 0;
+
         while(isRunning) {
+            while(state == EmulatorState.PAUSED) {
+                System.out.println("paused: " + counter++);
+
+                try {
+                    Thread.sleep(0);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
             startTime = System.nanoTime();
 
             cpu.execute();

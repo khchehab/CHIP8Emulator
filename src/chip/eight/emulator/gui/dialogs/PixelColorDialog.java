@@ -6,36 +6,20 @@ import chip.eight.emulator.util.Constants;
 import javax.swing.*;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
-public class PixelColorDialog {
-    private static final int MAIN_PANEL_WIDTH = 300;
+public class PixelColorDialog extends SettingDialog {
     private static final int SET_PIXEL_PANEL_HEIGHT = 50;
     private static final int UNSET_PIXEL_PANEL_HEIGHT = 50;
-    private static final int BUTTON_PANEL_HEIGHT = 30;
 
-    private JDialog dialog;
-    private JPanel contentPane;
-    private JPanel mainPanel;
+    private Color setColor, unsetColor;
     private JTextField setPixelRedField, setPixelGreenField, setPixelBlueField,
-                        unsetPixelRedField, unsetPixelGreenField, unsetPixelBlueField;
-
-    private final JFrame parent;
-    private Color setColor;
-    private Color unsetColor;
-    private int state;
+            unsetPixelRedField, unsetPixelGreenField, unsetPixelBlueField;
 
     public PixelColorDialog(JFrame parent, Color setColor, Color unsetColor) {
-        this.parent = parent;
         this.setColor = setColor;
         this.unsetColor = unsetColor;
-        this.state = -1;
 
-        buildDialog();
-    }
-
-    public void show() {
-        dialog.setVisible(true);
+        initDialog(parent, "Pixel Color Chooser", "Invalid Pixel Colors", "All the color fields are required.");
     }
 
     public Color getSetColor() {
@@ -46,45 +30,48 @@ public class PixelColorDialog {
         return unsetColor;
     }
 
-    public boolean isOkClicked() {
-        return state == Constants.OK_CLICKED;
-    }
-
-    private void buildDialog() {
-        dialog = new JDialog(parent, "Pixel Color Chooser", true);
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        dialog.setLocationRelativeTo(parent);
-
-        int dialogHeight = SET_PIXEL_PANEL_HEIGHT + UNSET_PIXEL_PANEL_HEIGHT + BUTTON_PANEL_HEIGHT;
-
-        contentPane = new JPanel();
-        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
-        contentPane.setPreferredSize(new Dimension(MAIN_PANEL_WIDTH, dialogHeight));
-        contentPane.registerKeyboardAction(event -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        contentPane.registerKeyboardAction(event -> onOk(), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
-        buildMainPanel();
-        buildButtonPanel();
-
-        dialog.setContentPane(contentPane);
-        dialog.pack();
-    }
-
-    private void buildMainPanel() {
-        mainPanel = new JPanel();
+    @Override
+    protected JPanel buildMainPanel() {
+        JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(2, 1));
-        mainPanel.setPreferredSize(new Dimension(MAIN_PANEL_WIDTH, SET_PIXEL_PANEL_HEIGHT + UNSET_PIXEL_PANEL_HEIGHT));
+        mainPanel.setPreferredSize(new Dimension(getMainPanelWidth(), getMainPanelHeight()));
 
-        buildSetPixelPanel();
-        buildUnsetPixelPanel();
+        mainPanel.add(buildSetPixelPanel());
+        mainPanel.add(buildUnsetPixelPanel());
 
-        contentPane.add(mainPanel);
+        return mainPanel;
     }
 
-    private void buildSetPixelPanel() {
+    @Override
+    protected int getMainPanelWidth() {
+        return 300;
+    }
+
+    @Override
+    protected int getMainPanelHeight() {
+        return SET_PIXEL_PANEL_HEIGHT + UNSET_PIXEL_PANEL_HEIGHT;
+    }
+
+    @Override
+    protected void applyOkChanges() {
+        setColor = constructColor(setPixelRedField, setPixelGreenField, setPixelBlueField);
+        unsetColor = constructColor(unsetPixelRedField, unsetPixelGreenField, unsetPixelBlueField);
+    }
+
+    @Override
+    protected boolean isRequiredEmpty() {
+        return Constants.isStringEmpty(setPixelRedField.getText()) ||
+                Constants.isStringEmpty(setPixelGreenField.getText()) ||
+                Constants.isStringEmpty(setPixelBlueField.getText()) ||
+                Constants.isStringEmpty(unsetPixelRedField.getText()) ||
+                Constants.isStringEmpty(unsetPixelGreenField.getText()) ||
+                Constants.isStringEmpty(unsetPixelBlueField.getText());
+    }
+
+    private JPanel buildSetPixelPanel() {
         JPanel setPixelPanel = new JPanel();
         setPixelPanel.setLayout(new GridLayout(1, 6));
-        setPixelPanel.setPreferredSize(new Dimension(MAIN_PANEL_WIDTH, SET_PIXEL_PANEL_HEIGHT));
+        setPixelPanel.setPreferredSize(new Dimension(getMainPanelWidth(), SET_PIXEL_PANEL_HEIGHT));
         setPixelPanel.setBorder(BorderFactory.createTitledBorder("Set Pixel"));
 
         setPixelRedField = new JTextField();
@@ -104,13 +91,13 @@ public class PixelColorDialog {
         setPixelPanel.add(new JLabel("Blue"));
         setPixelPanel.add(setPixelBlueField);
 
-        mainPanel.add(setPixelPanel);
+        return setPixelPanel;
     }
 
-    private void buildUnsetPixelPanel() {
+    private JPanel buildUnsetPixelPanel() {
         JPanel unsetPixelPanel = new JPanel();
         unsetPixelPanel.setLayout(new GridLayout(1, 6));
-        unsetPixelPanel.setPreferredSize(new Dimension(MAIN_PANEL_WIDTH, UNSET_PIXEL_PANEL_HEIGHT));
+        unsetPixelPanel.setPreferredSize(new Dimension(getMainPanelWidth(), UNSET_PIXEL_PANEL_HEIGHT));
         unsetPixelPanel.setBorder(BorderFactory.createTitledBorder("Unset Pixel"));
 
         unsetPixelRedField = new JTextField();
@@ -130,42 +117,7 @@ public class PixelColorDialog {
         unsetPixelPanel.add(new JLabel("Blue"));
         unsetPixelPanel.add(unsetPixelBlueField);
 
-        mainPanel.add(unsetPixelPanel);
-    }
-
-    private void buildButtonPanel() {
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(1, 3));
-        buttonPanel.setPreferredSize(new Dimension(MAIN_PANEL_WIDTH, BUTTON_PANEL_HEIGHT));
-
-        JButton okButton = new JButton("OK");
-        okButton.addActionListener(event -> onOk());
-
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(event -> onCancel());
-
-        buttonPanel.add(new JPanel());
-        buttonPanel.add(okButton);
-        buttonPanel.add(cancelButton);
-
-        contentPane.add(buttonPanel);
-    }
-
-    private void onCancel() {
-        this.state = Constants.CANCEL_CLICKED;
-        dialog.dispose();
-    }
-
-    private void onOk() {
-        if(isAnyFieldEmpty()) {
-            JOptionPane.showMessageDialog(dialog, "All the color fields are required", "Invalid Pixel Colors", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        this.state = Constants.OK_CLICKED;
-        setColor = constructColor(setPixelRedField, setPixelGreenField, setPixelBlueField);
-        unsetColor = constructColor(unsetPixelRedField, unsetPixelGreenField, unsetPixelBlueField);
-        dialog.dispose();
+        return unsetPixelPanel;
     }
 
     private Color constructColor(JTextField redField, JTextField greenField, JTextField blueField) {
@@ -173,14 +125,5 @@ public class PixelColorDialog {
                 green = Integer.parseInt(greenField.getText()),
                 blue = Integer.parseInt(blueField.getText());
         return new Color(red, green, blue);
-    }
-
-    private boolean isAnyFieldEmpty() {
-        return Constants.isStringEmpty(setPixelRedField.getText()) ||
-                Constants.isStringEmpty(setPixelGreenField.getText()) ||
-                Constants.isStringEmpty(setPixelBlueField.getText()) ||
-                Constants.isStringEmpty(unsetPixelRedField.getText()) ||
-                Constants.isStringEmpty(unsetPixelGreenField.getText()) ||
-                Constants.isStringEmpty(unsetPixelBlueField.getText());
     }
 }

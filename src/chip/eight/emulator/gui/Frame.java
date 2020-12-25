@@ -137,12 +137,16 @@ public class Frame {
         // Building the options menu
         JMenuItem pixelColorsMenuItem = new JMenuItem("Pixel Colors");
         pixelColorsMenuItem.addActionListener(event -> {
+            pauseEmulator();
+
             PixelColorDialog dialog = new PixelColorDialog(frame, screen.getSetColor(), screen.getUnsetColor());
             dialog.show();
 
             if(dialog.isOkClicked()) {
                 changePixelColors(dialog.getSetColor(), dialog.getUnsetColor());
             }
+
+            unpauseEmulator();
         });
 
         JMenuItem chip8ModeMenuItem = new JMenuItem("Chip8 Mode");
@@ -179,6 +183,18 @@ public class Frame {
         menuBar.add(settingsMenu);
 
         frame.setJMenuBar(menuBar);
+    }
+
+    private void pauseEmulator() {
+        if(emulator != null) {
+            emulator.pause();
+        }
+    }
+
+    private void unpauseEmulator() {
+        if(emulator != null) {
+            emulator.unpause();
+        }
     }
 
     private void startEmulator() {
