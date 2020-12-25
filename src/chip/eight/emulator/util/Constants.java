@@ -11,4 +11,8 @@ public class Constants {
 
     // Prevent initialization
     private Constants() {}
+
+    public static boolean isStringEmpty(String text) {
+        return text == null || text.isEmpty();
+    }
 }

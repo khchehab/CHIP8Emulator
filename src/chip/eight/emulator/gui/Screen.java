@@ -38,6 +38,22 @@ public class Screen extends JPanel {
         data[pos] = pixel;
     }
 
+    public Color getSetColor() {
+        return setColor;
+    }
+
+    public void setSetColor(Color setColor) {
+        this.setColor = setColor;
+    }
+
+    public Color getUnsetColor() {
+        return unsetColor;
+    }
+
+    public void setUnsetColor(Color unsetColor) {
+        this.unsetColor = unsetColor;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

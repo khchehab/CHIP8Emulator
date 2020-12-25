@@ -132,23 +132,41 @@ public class Frame {
         fileMenu.add(exitMenuItem);
 
         // Building the options menu
-        JMenuItem settingsMenuItem = new JMenuItem("Settings");
-        settingsMenuItem.addActionListener(event -> {
-            // todo action listener for settings
-            // options to have:
-            // 1. color of set and unset pixels
-            // 2. change cpu frequency
-            // 3. change the scale
-            // 4. keypad mapping
+        JMenuItem pixelColorsMenuItem = new JMenuItem("Pixel Colors");
+        pixelColorsMenuItem.addActionListener(event -> {
+            PixelColorChangerDialog dialog = new PixelColorChangerDialog(frame, screen.getSetColor(), screen.getUnsetColor());
+            dialog.show();
+
+            if(dialog.isOkClicked()) {
+                changePixelColors(dialog.getSetColor(), dialog.getUnsetColor());
+            }
         });
 
-        JMenu optionsMenu = new JMenu("Options");
-        optionsMenu.add(settingsMenuItem);
+        JMenuItem cpuFrequencyMenuItem = new JMenuItem("CPU Frequency");
+        cpuFrequencyMenuItem.addActionListener(event -> {
+            // todo
+        });
+
+        JMenuItem scaleMenuItem = new JMenuItem("Scale");
+        scaleMenuItem.addActionListener(event -> {
+            // todo
+        });
+
+        JMenuItem keypadMappingMenuItem = new JMenuItem("Keypad Mapping");
+        keypadMappingMenuItem.addActionListener(event -> {
+            // todo
+        });
+
+        JMenu settingsMenu = new JMenu("Settings");
+        settingsMenu.add(pixelColorsMenuItem);
+        settingsMenu.add(cpuFrequencyMenuItem);
+        settingsMenu.add(scaleMenuItem);
+        settingsMenu.add(keypadMappingMenuItem);
 
         // Building the menu bar
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(fileMenu);
-        menuBar.add(optionsMenu);
+        menuBar.add(settingsMenu);
 
         frame.setJMenuBar(menuBar);
     }
@@ -198,5 +216,15 @@ public class Frame {
 
     private int getScreenHeight() {
         return mode.getHeight() * scale;
+    }
+
+    private void changePixelColors(Color setColor, Color unsetColor) {
+        screen.setSetColor(setColor);
+        screen.setUnsetColor(unsetColor);
+        TOP_PADDING.setBackground(unsetColor);
+        BOTTOM_PADDING.setBackground(unsetColor);
+        RIGHT_PADDING.setBackground(unsetColor);
+        LEFT_PADDING.setBackground(unsetColor);
+        screen.repaint();
     }
 }
