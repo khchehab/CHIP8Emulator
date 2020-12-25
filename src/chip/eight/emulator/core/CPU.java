@@ -290,12 +290,12 @@ public class CPU {
         }
 
         if(soundTimer > 0) {
-            //logInfo("START SOUND");
             soundTimer--;
+            Audio.play();
         }
 
         if(soundTimer == 0) {
-            //logInfo("STOP SOUND");
+            Audio.stop();
         }
     }
 

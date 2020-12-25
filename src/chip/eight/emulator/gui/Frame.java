@@ -138,7 +138,7 @@ public class Frame {
         // Building the options menu
         JMenuItem pixelColorsMenuItem = new JMenuItem("Pixel Colors");
         pixelColorsMenuItem.addActionListener(event -> {
-            // todo see how to generify the code inside it since its the same with the other settings dialog
+            // todo see how to generify the code inside it since its the same with the other settings dialog with some changes
             pauseEmulator();
 
             PixelColorDialog dialog = new PixelColorDialog(frame, screen.getSetColor(), screen.getUnsetColor());
