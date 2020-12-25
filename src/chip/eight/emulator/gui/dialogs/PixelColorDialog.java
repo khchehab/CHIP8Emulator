@@ -8,7 +8,7 @@ import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class PixelColorChangerDialog {
+public class PixelColorDialog {
     private static final int MAIN_PANEL_WIDTH = 300;
     private static final int SET_PIXEL_PANEL_HEIGHT = 50;
     private static final int UNSET_PIXEL_PANEL_HEIGHT = 50;
@@ -28,7 +28,7 @@ public class PixelColorChangerDialog {
     private Color unsetColor;
     private int state;
 
-    public PixelColorChangerDialog(JFrame parent, Color setColor, Color unsetColor) {
+    public PixelColorDialog(JFrame parent, Color setColor, Color unsetColor) {
         this.parent = parent;
         this.setColor = setColor;
         this.unsetColor = unsetColor;

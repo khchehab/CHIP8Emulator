@@ -3,7 +3,7 @@ package chip.eight.emulator.gui;
 import chip.eight.emulator.core.Chip8Mode;
 import chip.eight.emulator.core.Emulator;
 import chip.eight.emulator.core.KeypadListener;
-import chip.eight.emulator.gui.dialogs.PixelColorChangerDialog;
+import chip.eight.emulator.gui.dialogs.PixelColorDialog;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -137,7 +137,7 @@ public class Frame {
         // Building the options menu
         JMenuItem pixelColorsMenuItem = new JMenuItem("Pixel Colors");
         pixelColorsMenuItem.addActionListener(event -> {
-            PixelColorChangerDialog dialog = new PixelColorChangerDialog(frame, screen.getSetColor(), screen.getUnsetColor());
+            PixelColorDialog dialog = new PixelColorDialog(frame, screen.getSetColor(), screen.getUnsetColor());
             dialog.show();
 
             if(dialog.isOkClicked()) {
