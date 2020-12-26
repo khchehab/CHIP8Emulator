@@ -151,11 +151,6 @@ public class Frame {
             unpauseEmulator();
         });
 
-        JMenuItem chip8ModeMenuItem = new JMenuItem("Chip8 Mode");
-        chip8ModeMenuItem.addActionListener(event -> {
-            // todo
-        });
-
         JMenuItem cpuFrequencyMenuItem = new JMenuItem("CPU Frequency");
         cpuFrequencyMenuItem.addActionListener(event -> {
             pauseEmulator();
@@ -170,6 +165,11 @@ public class Frame {
             unpauseEmulator();
         });
 
+        JMenuItem modeMenuItem = new JMenuItem("Chip8 Mode");
+        modeMenuItem.addActionListener(event -> {
+            // todo
+        });
+
         JMenuItem scaleMenuItem = new JMenuItem("Scale");
         scaleMenuItem.addActionListener(event -> {
             // todo
@@ -182,8 +182,8 @@ public class Frame {
 
         JMenu settingsMenu = new JMenu("Settings");
         settingsMenu.add(pixelColorsMenuItem);
-        settingsMenu.add(chip8ModeMenuItem);
         settingsMenu.add(cpuFrequencyMenuItem);
+        settingsMenu.add(modeMenuItem);
         settingsMenu.add(scaleMenuItem);
         settingsMenu.add(keypadMappingMenuItem);
 
@@ -270,5 +270,12 @@ public class Frame {
         if(emulator != null) {
             emulator.changeCpuFrequency(cpuFrequency);
         }
+    }
+
+    private void changeDimension(Chip8Mode mode, int scale) {
+        this.mode = mode;
+        this.scale = scale;
+
+        // todo
     }
 }

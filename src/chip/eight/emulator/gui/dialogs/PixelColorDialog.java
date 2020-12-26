@@ -70,10 +70,11 @@ public class PixelColorDialog extends SettingDialog {
 
     private JPanel buildSetPixelPanel() {
         JPanel setPixelPanel = new JPanel();
-        setPixelPanel.setLayout(new GridLayout(1, 6));
+        setPixelPanel.setLayout(new GridLayout(1, 3));
         setPixelPanel.setPreferredSize(new Dimension(getMainPanelWidth(), SET_PIXEL_PANEL_HEIGHT));
         setPixelPanel.setBorder(BorderFactory.createTitledBorder("Set Pixel"));
 
+        // todo fix the issue of having like 033 to be converted to 33
         setPixelRedField = new JTextField();
         ((PlainDocument) setPixelRedField.getDocument()).setDocumentFilter(new IntegerFilter(0, 255));
         setPixelRedField.setText(String.valueOf(setColor.getRed()));
@@ -84,19 +85,31 @@ public class PixelColorDialog extends SettingDialog {
         ((PlainDocument) setPixelBlueField.getDocument()).setDocumentFilter(new IntegerFilter(0, 255));
         setPixelBlueField.setText(String.valueOf(setColor.getBlue()));
 
-        setPixelPanel.add(new JLabel("Red"));
-        setPixelPanel.add(setPixelRedField);
-        setPixelPanel.add(new JLabel("Green"));
-        setPixelPanel.add(setPixelGreenField);
-        setPixelPanel.add(new JLabel("Blue"));
-        setPixelPanel.add(setPixelBlueField);
+        JPanel redPanel = new JPanel();
+        redPanel.setLayout(new BoxLayout(redPanel, BoxLayout.X_AXIS));
+        redPanel.add(new JLabel("Red"));
+        redPanel.add(setPixelRedField);
+
+        JPanel greenPanel = new JPanel();
+        greenPanel.setLayout(new BoxLayout(greenPanel, BoxLayout.X_AXIS));
+        greenPanel.add(new JLabel("Green"));
+        greenPanel.add(setPixelGreenField);
+
+        JPanel bluePanel = new JPanel();
+        bluePanel.setLayout(new BoxLayout(bluePanel, BoxLayout.X_AXIS));
+        bluePanel.add(new JLabel("Blue"));
+        bluePanel.add(setPixelBlueField);
+
+        setPixelPanel.add(redPanel);
+        setPixelPanel.add(greenPanel);
+        setPixelPanel.add(bluePanel);
 
         return setPixelPanel;
     }
 
     private JPanel buildUnsetPixelPanel() {
         JPanel unsetPixelPanel = new JPanel();
-        unsetPixelPanel.setLayout(new GridLayout(1, 6));
+        unsetPixelPanel.setLayout(new GridLayout(1, 3));
         unsetPixelPanel.setPreferredSize(new Dimension(getMainPanelWidth(), UNSET_PIXEL_PANEL_HEIGHT));
         unsetPixelPanel.setBorder(BorderFactory.createTitledBorder("Unset Pixel"));
 
@@ -110,12 +123,24 @@ public class PixelColorDialog extends SettingDialog {
         ((PlainDocument) unsetPixelBlueField.getDocument()).setDocumentFilter(new IntegerFilter(0, 255));
         unsetPixelBlueField.setText(String.valueOf(unsetColor.getBlue()));
 
-        unsetPixelPanel.add(new JLabel("Red"));
-        unsetPixelPanel.add(unsetPixelRedField);
-        unsetPixelPanel.add(new JLabel("Green"));
-        unsetPixelPanel.add(unsetPixelGreenField);
-        unsetPixelPanel.add(new JLabel("Blue"));
-        unsetPixelPanel.add(unsetPixelBlueField);
+        JPanel redPanel = new JPanel();
+        redPanel.setLayout(new BoxLayout(redPanel, BoxLayout.X_AXIS));
+        redPanel.add(new JLabel("Red"));
+        redPanel.add(unsetPixelRedField);
+
+        JPanel greenPanel = new JPanel();
+        greenPanel.setLayout(new BoxLayout(greenPanel, BoxLayout.X_AXIS));
+        greenPanel.add(new JLabel("Green"));
+        greenPanel.add(unsetPixelGreenField);
+
+        JPanel bluePanel = new JPanel();
+        bluePanel.setLayout(new BoxLayout(bluePanel, BoxLayout.X_AXIS));
+        bluePanel.add(new JLabel("Blue"));
+        bluePanel.add(unsetPixelBlueField);
+
+        unsetPixelPanel.add(redPanel);
+        unsetPixelPanel.add(greenPanel);
+        unsetPixelPanel.add(bluePanel);
 
         return unsetPixelPanel;
     }
