@@ -54,6 +54,10 @@ public class Screen extends JPanel {
         this.unsetColor = unsetColor;
     }
 
+    public void setScale(int scale) {
+        this.scale = scale;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

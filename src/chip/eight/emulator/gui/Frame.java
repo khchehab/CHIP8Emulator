@@ -5,6 +5,7 @@ import chip.eight.emulator.core.Emulator;
 import chip.eight.emulator.core.KeypadListener;
 import chip.eight.emulator.gui.dialogs.CpuFrequencyDialog;
 import chip.eight.emulator.gui.dialogs.PixelColorDialog;
+import chip.eight.emulator.gui.dialogs.ScaleDialog;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -172,7 +173,16 @@ public class Frame {
 
         JMenuItem scaleMenuItem = new JMenuItem("Scale");
         scaleMenuItem.addActionListener(event -> {
-            // todo
+            pauseEmulator();
+
+            ScaleDialog dialog = new ScaleDialog(frame, scale);
+            dialog.show();
+
+            if(dialog.isOkClicked()) {
+                changeDimension(null, dialog.getScale());
+            }
+
+            unpauseEmulator();
         });
 
         JMenuItem keypadMappingMenuItem = new JMenuItem("Keypad Mapping");
@@ -273,9 +283,13 @@ public class Frame {
     }
 
     private void changeDimension(Chip8Mode mode, int scale) {
-        this.mode = mode;
-        this.scale = scale;
+        this.mode = mode == null ? this.mode : mode;
+        this.scale = scale == -1 ? this.scale : scale;
 
-        // todo
+        screen.setScale(this.scale);
+        screen.setPreferredSize(new Dimension(getScreenWidth() + 1, getScreenHeight() + 1));
+        frame.setSize(new Dimension(getFrameWidth(), getFrameHeight()));
+        frame.repaint();
+        frame.pack();
     }
 }

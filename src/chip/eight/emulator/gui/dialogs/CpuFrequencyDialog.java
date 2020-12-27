@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CpuFrequencyDialog extends SettingDialog {
-    private static final int PADDING = 5;
-
     private static final int MINIMUM_FREQUENCY = 300;
     private static final int MAXIMUM_FREQUENCY = 1_500;
     private static final int MAJOR_TICK_INTERVAL = 300;

@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public abstract class SettingDialog {
+    protected static final int PADDING = 5;
+
     private static final int BUTTON_PANEL_HEIGHT = 30;
 
     private JDialog dialog;
