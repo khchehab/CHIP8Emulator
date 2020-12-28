@@ -166,11 +166,6 @@ public class Frame {
             unpauseEmulator();
         });
 
-        JMenuItem modeMenuItem = new JMenuItem("Chip8 Mode");
-        modeMenuItem.addActionListener(event -> {
-            // todo
-        });
-
         JMenuItem scaleMenuItem = new JMenuItem("Scale");
         scaleMenuItem.addActionListener(event -> {
             pauseEmulator();
@@ -179,7 +174,7 @@ public class Frame {
             dialog.show();
 
             if(dialog.isOkClicked()) {
-                changeDimension(null, dialog.getScale());
+                changeScale(dialog.getScale());
             }
 
             unpauseEmulator();
@@ -193,7 +188,6 @@ public class Frame {
         JMenu settingsMenu = new JMenu("Settings");
         settingsMenu.add(pixelColorsMenuItem);
         settingsMenu.add(cpuFrequencyMenuItem);
-        settingsMenu.add(modeMenuItem);
         settingsMenu.add(scaleMenuItem);
         settingsMenu.add(keypadMappingMenuItem);
 
@@ -282,9 +276,8 @@ public class Frame {
         }
     }
 
-    private void changeDimension(Chip8Mode mode, int scale) {
-        this.mode = mode == null ? this.mode : mode;
-        this.scale = scale == -1 ? this.scale : scale;
+    private void changeScale(int scale) {
+        this.scale = scale;
 
         screen.setScale(this.scale);
         screen.setPreferredSize(new Dimension(getScreenWidth() + 1, getScreenHeight() + 1));
