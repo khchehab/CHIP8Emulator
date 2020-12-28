@@ -74,7 +74,6 @@ public class PixelColorDialog extends SettingDialog {
         setPixelPanel.setPreferredSize(new Dimension(getMainPanelWidth(), SET_PIXEL_PANEL_HEIGHT));
         setPixelPanel.setBorder(BorderFactory.createTitledBorder("Set Pixel"));
 
-        // todo fix the issue of having like 033 to be converted to 33
         setPixelRedField = new JTextField();
         ((PlainDocument) setPixelRedField.getDocument()).setDocumentFilter(new IntegerFilter(0, 255));
         setPixelRedField.setText(String.valueOf(setColor.getRed()));
