@@ -84,6 +84,7 @@ public class Frame {
         frame = new JFrame("Chip8 Emulator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
+        frame.setMinimumSize(frameDimension);
         frame.setSize(frameDimension);
         frame.setLayout(new BorderLayout());
 
@@ -103,6 +104,7 @@ public class Frame {
         Dimension screenDimension = new Dimension(getScreenWidth() + 1, getScreenHeight() + 1);
 
         screen = new Screen(mode.getWidth(), mode.getHeight(), scale);
+        screen.setMinimumSize(screenDimension);
         screen.setPreferredSize(screenDimension);
         screen.setLayout(null);
         screen.addKeyListener(keypadListener);
@@ -279,9 +281,14 @@ public class Frame {
     private void changeScale(int scale) {
         this.scale = scale;
 
+        Dimension screenDimension = new Dimension(getScreenWidth() + 1, getScreenHeight() + 1),
+                frameDimension = new Dimension(getFrameWidth(), getFrameHeight());
+
         screen.setScale(this.scale);
-        screen.setPreferredSize(new Dimension(getScreenWidth() + 1, getScreenHeight() + 1));
-        frame.setSize(new Dimension(getFrameWidth(), getFrameHeight()));
+        screen.setMinimumSize(screenDimension);
+        screen.setPreferredSize(screenDimension);
+        frame.setMinimumSize(frameDimension);
+        frame.setSize(frameDimension);
         frame.repaint();
         frame.pack();
     }
