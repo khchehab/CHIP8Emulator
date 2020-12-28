@@ -43,6 +43,10 @@ public class KeypadListener extends KeyAdapter {
         this.keypadMapping = keypadMapping;
     }
 
+    public Map<Integer, Integer> getKeypadMapping() {
+        return keypadMapping;
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
         pressed = getKey(e.getKeyCode());

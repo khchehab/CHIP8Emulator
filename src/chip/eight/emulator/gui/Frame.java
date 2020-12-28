@@ -4,6 +4,7 @@ import chip.eight.emulator.core.Chip8Mode;
 import chip.eight.emulator.core.Emulator;
 import chip.eight.emulator.core.KeypadListener;
 import chip.eight.emulator.gui.dialogs.CpuFrequencyDialog;
+import chip.eight.emulator.gui.dialogs.KeypadMappingDialog;
 import chip.eight.emulator.gui.dialogs.PixelColorDialog;
 import chip.eight.emulator.gui.dialogs.ScaleDialog;
 
@@ -184,6 +185,16 @@ public class Frame {
         JMenuItem keypadMappingMenuItem = new JMenuItem("Keypad Mapping");
         keypadMappingMenuItem.addActionListener(event -> {
             // todo
+//            pauseEmulator();
+//
+//            KeypadMappingDialog dialog = new KeypadMappingDialog(frame, keypadListener.getKeypadMapping());
+//            dialog.show();
+//
+//            if(dialog.isOkClicked()) {
+//                keypadListener.setKeypadMapping(dialog.getKeypadMapping());
+//            }
+//
+//            unpauseEmulator();
         });
 
         JMenu settingsMenu = new JMenu("Settings");

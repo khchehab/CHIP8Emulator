@@ -8,6 +8,5 @@ public class Audio {
         java.awt.Toolkit.getDefaultToolkit().beep();
     }
 
-    public static void stop() {
-    }
+    public static void stop() {}
 }
